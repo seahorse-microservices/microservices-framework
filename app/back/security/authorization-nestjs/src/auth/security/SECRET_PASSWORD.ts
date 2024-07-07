@@ -1,1 +1,0 @@
-export const SECRET_PASSWORD = "adjajnd2he12e1iehaheaiheauhd";

@@ -1,19 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { listComponent } from './list.component';
+import { ListComponent } from './list.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { HttpTestingController } from '@angular/common/http/testing';
-import { User } from './user';
+import { UserResponse } from './print-users-usecase/user-response';
+
 
 describe('ListComponent', () => {
-	let appCompFixture: ComponentFixture<listComponent>;
-	let appCompInstance: listComponent;
+	let appCompFixture: ComponentFixture<ListComponent>;
+	let appCompInstance: ListComponent;
 	let httpTestController: HttpTestingController;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			imports: [listComponent, HttpClientTestingModule],
+			imports: [ListComponent, HttpClientTestingModule],
 		}).compileComponents();
-		appCompFixture = TestBed.createComponent(listComponent);
+		appCompFixture = TestBed.createComponent(ListComponent);
 		appCompInstance = appCompFixture.componentInstance;
 		httpTestController = TestBed.inject(HttpTestingController);
 	});
@@ -27,7 +28,7 @@ describe('ListComponent', () => {
 	});
 
 	it('The HTTP request retrieves users', () => {
-		const mockUserArray: User[] = [{
+		const mockUserArray: UserResponse[] = [{
 			id: 1,
 			name: "Leanne Graham",
 			username: "Bret",
@@ -39,7 +40,7 @@ describe('ListComponent', () => {
 		}];
 		
 
-		appCompInstance.getUsersFromComponent()
+		appCompInstance.ngOnInit()
 		
 		const mockRequest = httpTestController.expectOne("https://jsonplaceholder.typicode.com/users");
 		mockRequest.flush(mockUserArray);

@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
-import { UserService } from './user.service';
-import { CreateUserRequest } from './dto/create-user-request.dto';
-import { CreateUserResponse } from './dto/create-user-response.dto';
-import { GetUserResponse } from './dto/get-user-response.dto';
+import { CreateUserUsecase } from './create-user-usecase/create-user.usecase';
+import { CreateUserRequest } from './create-user-usecase/create-user-request.dto';
+import { CreateUserResponse } from './create-user-usecase/create-user-response.dto';
+import { GetUserResponse } from './get-user-usecase/get-user-response.dto';
 
 describe('UserController', () => {
   let controller: UserController;
@@ -19,7 +19,7 @@ describe('UserController', () => {
           controllers: [UserController],
           providers: [
             {
-              provide: UserService,
+              provide: CreateUserUsecase,
               useValue: mockUserService,
             },
           ],

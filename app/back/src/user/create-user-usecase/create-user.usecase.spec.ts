@@ -1,19 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserService } from './user.service';
+import { CreateUserUsecase } from './create-user.usecase';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
+import { User } from '../user.entity';
 import { Repository } from 'typeorm';
-import { CreateUserRequest } from './dto/create-user-request.dto';
-import { CreateUserResponse } from './dto/create-user-response.dto';
-import { GetUserResponse } from './dto/get-user-response.dto';
+import { CreateUserRequest } from './create-user-request.dto';
+import { CreateUserResponse } from './create-user-response.dto';
+import { GetUserResponse } from '../get-user-usecase/get-user-response.dto';
 
 describe('UserService', () => {
-  let service: UserService;
+  let service: CreateUserUsecase;
   let userRepository: Repository<User>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UserService],
+      providers: [CreateUserUsecase],
       imports: [
         TypeOrmModule.forFeature([User]),
         TypeOrmModule.forRoot({
@@ -31,7 +31,7 @@ describe('UserService', () => {
     }).compile();
 
     userRepository = module.get('UserRepository');
-    service = module.get<UserService>(UserService);
+    service = module.get<CreateUserUsecase>(CreateUserUsecase);
   });
 
   it('should be defined', () => {
@@ -45,7 +45,7 @@ describe('UserService', () => {
       createUserRequest.name = "Pepe";
       createUserRequest.password = "changme";
 
-      const createUserResponse: CreateUserResponse = await service.create(createUserRequest);
+      const createUserResponse: CreateUserResponse = await service.execute(createUserRequest);
       
       expect(createUserRequest.email).toEqual(createUserResponse.email);
       expect(createUserRequest.name).toEqual(createUserResponse.name);
@@ -61,7 +61,7 @@ describe('UserService', () => {
     createUserRequest.name = "Pepe";
     createUserRequest.password = "changme";
 
-    const createUserResponse: CreateUserResponse = await service.create(createUserRequest);
+    const createUserResponse: CreateUserResponse = await service.execute(createUserRequest);
 
     const getUserResponse: GetUserResponse = await service.findOne(createUserResponse.id);
     expect(getUserResponse.email).toEqual(createUserResponse.email);

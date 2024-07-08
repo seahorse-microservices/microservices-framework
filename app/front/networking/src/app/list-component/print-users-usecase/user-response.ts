@@ -1,6 +1,6 @@
-export type user = User[]
+export type user = UserResponse[]
 
-export interface User {
+export interface UserResponse {
   id: number
   name: string
   username: string

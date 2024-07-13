@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateUserUsecase } from './create-user.usecase';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from '../user.entity';
+import { User } from '../user.schema';
 import { Repository } from 'typeorm';
 import { CreateUserRequest } from './create-user-request.dto';
 import { CreateUserResponse } from './create-user-response.dto';

@@ -1,39 +1,53 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateUserResponse } from './create-user-response.dto';
 import { CreateUserRequest } from './create-user-request.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../user.entity';
-import { Repository } from 'typeorm';
-import { GetUserResponse } from '../get-user-usecase/get-user-response.dto';
+import { User, UserDocument } from '../user.schema';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class CreateUserUsecase {
 
   constructor(  
-    @InjectRepository(User) private repository: Repository<User>,
+    @InjectModel(User.name)
+    private model: Model<UserDocument>,
     
   ) {}
   
   async execute(createUserRequest: CreateUserRequest): Promise<CreateUserResponse> {
 
-    const createUserEntity: User = new User();
     
-    createUserEntity.email = createUserRequest.email;
-    createUserEntity.name = createUserRequest.name;
-    createUserEntity.password = createUserRequest.password;
+    
+    const user: User = this.setUser(createUserRequest);
 
-    const userEntityCreated: User = await this.repository.save(createUserEntity);
+    if (await this.model.findOne({ email: createUserRequest.email })) {
+      console.log('Email already exists')
+      throw new ConflictException('This email already exists')
+    }
+    
+    const userCreated = await this.model.create(user);
 
     const createUserResponse: CreateUserResponse = new CreateUserResponse();
 
-    createUserResponse.email = userEntityCreated.email;
-    createUserResponse.name = userEntityCreated.name;
-    createUserResponse.password = userEntityCreated.password;
-    createUserResponse.id = userEntityCreated.id;
+    createUserResponse.email = userCreated.email;
+    createUserResponse.name = userCreated.name;
+    createUserResponse.password = userCreated.password;
+    createUserResponse.id = userCreated._id;
 
     return createUserResponse;
 
   }
+
+
+  private setUser(createUserRequest: CreateUserRequest): User {
+    const user: User = new User();
+    user.email = createUserRequest.email;
+    user.name = createUserRequest.name;
+    user.password = createUserRequest.password;
+    return user;
+  }
+
+
 
 
 

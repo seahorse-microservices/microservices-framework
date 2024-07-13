@@ -1,6 +1,6 @@
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
-import { User } from "./user.entity";
+import { User } from "./user.schema";
 
 
 

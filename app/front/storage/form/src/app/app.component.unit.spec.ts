@@ -1,30 +1,28 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 
-describe('AppComponent', () => {
+describe('AppComponent', function () {
   let fixture: ComponentFixture<AppComponent>;
   let app: AppComponent;
 	let appFixture: HTMLElement;
   let appFixtureButton: HTMLButtonElement;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AppComponent],
-    }).compileComponents();
-  });
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        imports: [AppComponent],
+      }).compileComponents();
+    });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(AppComponent);
-    app = fixture.componentInstance;
-		appFixture = fixture.nativeElement;
-		appFixtureButton = appFixture.querySelector("button") as HTMLButtonElement;
-  });
+    beforeEach(() => {
+      fixture = TestBed.createComponent(AppComponent);
+      app = fixture.componentInstance;
+		  appFixture = fixture.nativeElement;
+		  appFixtureButton = appFixture.querySelector("button") as HTMLButtonElement;
+    });
 
-  it('should create the app', () => {
-    expect(app).toBeTruthy();
-  });
+  it('should create the app', function() {expect(app).toBeTruthy();});
 
-  it('should have a fullname', () => {
+  it('should have a fullname', function() {
     let appFullname = appFixture.querySelector('input[formControlName="fullname"]') as HTMLInputElement;
     appFixtureButton.click();
     fixture.detectChanges();

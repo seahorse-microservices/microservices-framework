@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import mongoose from "mongoose";
 
-export class CreateUserResponse {
+export class SigninResponse {
     @ApiProperty()
     id: mongoose.Types.ObjectId;
     @ApiProperty()

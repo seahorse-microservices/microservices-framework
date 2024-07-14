@@ -1,24 +1,24 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { CreateUserResponse } from './create-user-response.dto';
-import { CreateUserRequest } from './create-user-request.dto';
-import { User, UserDocument } from '../user.schema';
+import { SigninResponse } from './signin-response.dto';
+import { SigninRequest } from './signin-request.dto';
+import { AccountModel } from '../account.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 @Injectable()
-export class CreateUserUsecase {
+export class SigninUserStory {
 
   constructor(  
-    @InjectModel(User.name)
-    private model: Model<UserDocument>,
+    @InjectModel(AccountModel.name)
+    private model: Model<AccountModel>,
     
   ) {}
   
-  async execute(createUserRequest: CreateUserRequest): Promise<CreateUserResponse> {
+  async execute(createUserRequest: SigninRequest): Promise<SigninResponse> {
 
     
     
-    const user: User = this.setUser(createUserRequest);
+    const user: AccountModel = this.setUser(createUserRequest);
 
     if (await this.model.findOne({ email: createUserRequest.email })) {
       console.log('Email already exists')
@@ -27,7 +27,7 @@ export class CreateUserUsecase {
     
     const userCreated = await this.model.create(user);
 
-    const createUserResponse: CreateUserResponse = new CreateUserResponse();
+    const createUserResponse: SigninResponse = new SigninResponse();
 
     createUserResponse.email = userCreated.email;
     createUserResponse.name = userCreated.name;
@@ -39,8 +39,8 @@ export class CreateUserUsecase {
   }
 
 
-  private setUser(createUserRequest: CreateUserRequest): User {
-    const user: User = new User();
+  private setUser(createUserRequest: SigninRequest): AccountModel {
+    const user: AccountModel = new AccountModel();
     user.email = createUserRequest.email;
     user.name = createUserRequest.name;
     user.password = createUserRequest.password;

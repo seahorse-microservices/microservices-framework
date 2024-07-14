@@ -1,23 +1,15 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from './user/user.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { AccountModule } from './account-epic/account.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'myuser',
-      password: '1234',
-      database: 'seahorse',
-      entities: ["dist/**/*.entity.js"],
-      autoLoadEntities: true,
-      synchronize: true,
+    MongooseModule.forRoot('mongodb://root:1234@localhost:27017/',{
+      dbName: 'seahorse'
     }),
-    UserModule,
+      AccountModule,
   ],
   controllers: [AppController],
   providers: [AppService],
